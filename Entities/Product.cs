@@ -1,9 +1,10 @@
 
+using ECommerceAPI.Entities.Interfaces;
 using ECommerceAPI.Entities.PivotTables;
 
 namespace ECommerceAPI.Entities;
 
-public class Product
+public class Product : IEntityIdBase
 {
     //Entity Attributes
     public int Id { get; set; }

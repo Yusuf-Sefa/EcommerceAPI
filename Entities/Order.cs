@@ -1,9 +1,10 @@
 using ECommerceAPI.Entities.Enums;
+using ECommerceAPI.Entities.Interfaces;
 using ECommerceAPI.Entities.PivotTables;
 
 namespace ECommerceAPI.Entities;
 
-public class Order
+public class Order : IEntityIdBase
 {
     //Entity Attributes
     public int Id { get; set; }

@@ -1,6 +1,8 @@
+using ECommerceAPI.Entities.Interfaces;
+
 namespace ECommerceAPI.Entities;
 
-public class Brand
+public class Brand : IEntityIdBase
 {
     //Entity Attributes//
     public int Id { get; set; }

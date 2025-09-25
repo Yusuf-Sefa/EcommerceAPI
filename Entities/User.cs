@@ -1,8 +1,9 @@
 using ECommerceAPI.Entities.Enums;
+using ECommerceAPI.Entities.Interfaces;
 
 namespace ECommerceAPI.Entities;
 
-public class User
+public class User : IEntityIdBase
 {
     //Entity Attributes
     public int Id { get; set; }
