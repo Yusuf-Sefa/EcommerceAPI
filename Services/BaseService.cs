@@ -47,14 +47,18 @@ public class BaseService<T, TResponseDto, TCreateDto> : IBaseService<T, TRespons
                 : null;
 
     }
-    public virtual async Task<TResponseDto> E_AddEntity(TCreateDto createDto)
+    public virtual async Task<TResponseDto?> E_AddEntity(TCreateDto createDto)
     {
         var validationResponse = await _validator.ValidateAsync(createDto);
 
         if (validationResponse.IsValid)
         {
-            return null;
+            var entity = _mapper.Map<T>(createDto);
+            await E_repository.E_AddEntity(entity);
+            return _mapper.Map<TResponseDto>(entity);
         }
+
+        return null;
 
     }
     public virtual async Task<TResponseDto?> E_DeleteEntity(int id)
@@ -70,7 +74,7 @@ public class BaseService<T, TResponseDto, TCreateDto> : IBaseService<T, TRespons
         return null;
 
     }
-    public virtual async Task<TResponseDto> E_UpdateEntity(TCreateDto createDto)
+    public virtual async Task<TResponseDto?> E_UpdateEntity(TCreateDto createDto)
     {
         var validationResponse = await _validator.ValidateAsync(createDto);
 
@@ -80,6 +84,8 @@ public class BaseService<T, TResponseDto, TCreateDto> : IBaseService<T, TRespons
             await E_repository.E_UpdateEntity(entity);
             return _mapper.Map<TResponseDto>(entity);
         }
+
+        return null;
 
     }
 

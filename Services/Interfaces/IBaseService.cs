@@ -12,7 +12,7 @@ public interface IBaseService<T, TResponseDto, TCreateDto>
     //Enumerables//
     Task<IEnumerable<TResponseDto>?> E_GetAll();
     Task<TResponseDto?> E_GetById(int id);
-    Task<TResponseDto> E_AddEntity(TCreateDto createDto);
+    Task<TResponseDto?> E_AddEntity(TCreateDto createDto);
     Task<TResponseDto?> E_DeleteEntity(int id);
     Task<TResponseDto?> E_UpdateEntity(TCreateDto createDto);
 
