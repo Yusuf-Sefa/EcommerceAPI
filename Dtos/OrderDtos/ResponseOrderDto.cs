@@ -3,7 +3,7 @@ using ECommerceAPI.Entities.Enums;
 
 namespace ECommerceAPI.Dtos.OrderDtos;
 
-public class GetOrderDto
+public class ResponseOrderDto
 {
     public string Code { get; set; }
     public decimal TotalPrice { get; set; }

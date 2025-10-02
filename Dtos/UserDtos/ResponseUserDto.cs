@@ -1,7 +1,7 @@
 
 namespace ECommerceAPI.Dtos.UserDtos;
 
-public class GetUserDto
+public class ResponseUserDto
 {
     public string Name { get; set; }
     public string Email { get; set; }

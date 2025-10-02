@@ -56,11 +56,11 @@ public class GenericRepository<T> : IEnumerableRepository<T>, IQueryableReposito
     //Queryable methods//
     public IQueryable<T> Q_GetAll()
     {
-        return _dbSet;
+        return _dbSet.AsNoTracking();
     }
     public IQueryable<T> Q_GetByFilter(Expression<Func<T, bool>>? predicate = null)
     {
-        return _dbSet.Where(predicate);
+        return _dbSet.Where(predicate).AsNoTracking();
     }
     public IQueryable<T> Q_GetWithInclude(params Expression<Func<T, object>>[]? includes)
     {

@@ -14,23 +14,23 @@ public class GeneralMapping : Profile
     public GeneralMapping()
     {
         CreateMap<Brand, CreateBrandDto>().ReverseMap();
-        CreateMap<Brand, GetBrandDto>().ReverseMap();
-        CreateMap<Brand, GetBrandWithProductsDto>().ReverseMap();
+        CreateMap<Brand, ResponseBrandDto>().ReverseMap();
+        CreateMap<Brand, ResponseBrandWithProductsDto>().ReverseMap();
 
         CreateMap<Category, CreateCategoryDto>().ReverseMap();
-        CreateMap<Category, GetCategoryDto>().ReverseMap();
-        CreateMap<Category, GetCategoryWithProducts>().ReverseMap();
+        CreateMap<Category, ResponseCategoryDto>().ReverseMap();
+        CreateMap<Category, ResponseCategoryWithProducts>().ReverseMap();
 
         CreateMap<Order, CreateOrderDto>().ReverseMap();
-        CreateMap<Order, GetOrderDto>().ReverseMap();
-        CreateMap<Order, GetOrderWithProducts>().ReverseMap();
+        CreateMap<Order, ResponseOrderDto>().ReverseMap();
+        CreateMap<Order, ResponseOrderWithProducts>().ReverseMap();
 
         CreateMap<Product, CreateProductDto>().ReverseMap();
-        CreateMap<Product, GetProductDto>().ReverseMap();
-        CreateMap<Product, GetProductWithCategoriesDto>().ReverseMap();
+        CreateMap<Product, ResponseProductDto>().ReverseMap();
+        CreateMap<Product, ResponseProductWithCategoriesDto>().ReverseMap();
 
         CreateMap<User, CreateUserDto>().ReverseMap();
-        CreateMap<User, GetUserDto>().ReverseMap();
+        CreateMap<User, ResponseUserDto>().ReverseMap();
 
     }
 }

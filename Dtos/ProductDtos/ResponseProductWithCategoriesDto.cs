@@ -1,7 +1,7 @@
 
 namespace ECommerceAPI.Dtos.ProductDtos;
 
-public class GetProductWithCategoriesDto
+public class ResponseProductWithCategoriesDto
 {
     public string Name { get; set; }
     public string SKU { get; set; }
