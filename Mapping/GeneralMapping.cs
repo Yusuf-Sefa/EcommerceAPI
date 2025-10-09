@@ -16,6 +16,7 @@ public class GeneralMapping : Profile
         CreateMap<Brand, CreateBrandDto>().ReverseMap();
         CreateMap<Brand, ResponseBrandDto>().ReverseMap();
         CreateMap<Brand, ResponseBrandWithProductsDto>().ReverseMap();
+        CreateMap<Brand, UpdateBrandActivityDto>().ReverseMap();
 
         CreateMap<Category, CreateCategoryDto>().ReverseMap();
         CreateMap<Category, ResponseCategoryDto>().ReverseMap();

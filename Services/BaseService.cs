@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ECommerceAPI.Services.Interfaces;
 
-public class BaseService<T, TResponseDto, TCreateDto> : IBaseService<T, TResponseDto, TCreateDto>
+public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<T, TResponseDto, TCreateDto, TUpdateDto>
     where T : class
     where TResponseDto : class
     where TCreateDto : class
+    where TUpdateDto : class
 {
     protected readonly IEnumerableRepository<T> E_repository;
     protected readonly IQueryableRepository<T> Q_repository;
@@ -51,14 +52,12 @@ public class BaseService<T, TResponseDto, TCreateDto> : IBaseService<T, TRespons
     {
         var validationResponse = await _validator.ValidateAsync(createDto);
 
-        if (validationResponse.IsValid)
-        {
-            var entity = _mapper.Map<T>(createDto);
-            await E_repository.E_AddEntity(entity);
-            return _mapper.Map<TResponseDto>(entity);
-        }
+        if (!validationResponse.IsValid)
+            throw new ValidationException(validationResponse.Errors.ToString());
 
-        return null;
+        var entity = _mapper.Map<T>(createDto);
+        await E_repository.E_AddEntity(entity);
+        return _mapper.Map<TResponseDto>(entity);
 
     }
     public virtual async Task<TResponseDto?> E_DeleteEntity(int id)
@@ -74,18 +73,16 @@ public class BaseService<T, TResponseDto, TCreateDto> : IBaseService<T, TRespons
         return null;
 
     }
-    public virtual async Task<TResponseDto?> E_UpdateEntity(TCreateDto createDto)
+    public virtual async Task<TResponseDto?> E_UpdateEntity(TUpdateDto updateDto)
     {
-        var validationResponse = await _validator.ValidateAsync(createDto);
+        var validationResponse = await _validator.ValidateAsync(updateDto);
 
-        if (validationResponse.IsValid)
-        {
-            var entity = _mapper.Map<T>(createDto);
-            await E_repository.E_UpdateEntity(entity);
-            return _mapper.Map<TResponseDto>(entity);
-        }
+        if (!validationResponse.IsValid)
+            throw new ValidationException(validationResponse.Errors.ToString());
 
-        return null;
+        var entity = _mapper.Map<T>(updateDto);
+        await E_repository.E_UpdateEntity(entity);
+        return _mapper.Map<TResponseDto>(entity);
 
     }
 

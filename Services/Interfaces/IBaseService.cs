@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceAPI.Services.Interfaces;
 
-public interface IBaseService<T, TResponseDto, TCreateDto> 
+public interface IBaseService<T, TResponseDto, TCreateDto, TUpdateDto> 
     where T : class
     where TResponseDto : class
     where TCreateDto : class 
@@ -14,7 +14,7 @@ public interface IBaseService<T, TResponseDto, TCreateDto>
     Task<TResponseDto?> E_GetById(int id);
     Task<TResponseDto?> E_AddEntity(TCreateDto createDto);
     Task<TResponseDto?> E_DeleteEntity(int id);
-    Task<TResponseDto?> E_UpdateEntity(TCreateDto createDto);
+    Task<TResponseDto?> E_UpdateEntity(TUpdateDto updateDto);
 
 
     //Queryables//
