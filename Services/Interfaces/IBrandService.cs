@@ -6,7 +6,7 @@ namespace ECommerceAPI.Services.Interfaces;
 public interface IBrandService
 {
 
-    public ResponseBrandDto? GetBrandByName(string name);
+    public Task<ResponseBrandDto?> GetBrandByName(string name);
     public ResponseBrandDto? GetBrandByCode(string code);
 
     public ResponseBrandWithProductsDto? GetBrandWithProductsById(int id);

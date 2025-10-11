@@ -4,6 +4,7 @@ using AutoMapper;
 using ECommerceAPI.Repository.RepositoryInterfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceAPI.Services.Interfaces;
 
@@ -87,21 +88,12 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
     }
 
 
-    public virtual IQueryable<TResponseDto> Q_GetAll()
-    {
-        var entities = Q_repository.Q_GetAll();
-        return _mapper.Map<IQueryable<TResponseDto>>(entities);
-    }
-    public virtual IQueryable<TResponseDto> Q_GetByFilter(Expression<Func<T, bool>>? predicate = null)
-    {
-        var entities = Q_repository.Q_GetByFilter(predicate);
-        return _mapper.Map<IQueryable<TResponseDto>>(entities);
-    }
-    public virtual IQueryable<TResponseDto> Q_MultiplerFilter(Expression<Func<T, bool>>[] filters, params Expression<Func<T, object>>[] includes)
-    {
-        var entities = Q_repository.Q_MultiplerFilter(filters, includes);
-        return _mapper.Map<IQueryable<TResponseDto>>(entities);
-    }
+    public virtual IQueryable<T> Q_GetAll() 
+    => Q_repository.Q_GetAll();
+    public virtual IQueryable<T> Q_GetByFilter(Expression<Func<T, bool>>? predicate = null)
+    => Q_repository.Q_GetByFilter(predicate);
+    public virtual IQueryable<T> Q_MultiplerFilter(Expression<Func<T, bool>>[] filters, params Expression<Func<T, object>>[] includes)
+    => Q_repository.Q_MultiplerFilter(filters, includes);
     public virtual IQueryable<T> Q_GetWithInclude(params Expression<Func<T, object>>[]? includes)
     => Q_repository.Q_GetWithInclude(includes);
     public virtual IQueryable<T> Q_GetWithIncludeAsSplitQuery(params Expression<Func<T, object>>[]? includes)
