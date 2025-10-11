@@ -6,8 +6,8 @@ namespace ECommerceAPI.Services.Interfaces;
 public interface IBrandService
 {
 
-    public Task<ResponseBrandDto?> GetBrandByName(string name);
-    public ResponseBrandDto? GetBrandByCode(string code);
+    public Task<ResponseBrandDto?> GetBrandByNameAsync(string name);
+    public Task<ResponseBrandDto?> GetBrandByCodeAsync(string code);
 
     public ResponseBrandWithProductsDto? GetBrandWithProductsById(int id);
     public int GetBrandProductCountAsync(int id);

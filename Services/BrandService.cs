@@ -7,6 +7,7 @@ using ECommerceAPI.Entities;
 using ECommerceAPI.Repository.RepositoryInterfaces;
 using ECommerceAPI.Services.Interfaces;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceAPI.Services;
 
@@ -17,11 +18,24 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
                         IQueryableRepository<Brand> queryableRepository,
                         IMapper _mapper,
                         IValidator<CreateBrandDto> _validator)
-    : base (enumerableRepository,
+    : base(enumerableRepository,
             queryableRepository,
             _mapper,
             _validator)
     { }
+
+    public async Task<ResponseBrandDto?> GetBrandByNameAsync(string name)
+    {
+        var brand = await Q_GetByFilter(b => b.Name == name).FirstOrDefaultAsync();
+
+        return _mapper.Map<ResponseBrandDto>(brand);
+    }
+    public async Task<ResponseBrandDto?> GetBrandByCodeAsync(string code)
+    {
+        var brand = await Q_GetByFilter(b => b.Code == code).FirstOrDefaultAsync();
+
+        return _mapper.Map<ResponseBrandDto>(brand);
+    }
 
     public async Task<ResponseBrandDto?> ActivateBrandAsync(int id)
     {
@@ -48,23 +62,11 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
 
     }
 
-    public ResponseBrandDto? GetBrandByCode(string code) =>
-    _mapper.Map<ResponseBrandDto>(Q_GetByFilter(b => b.Code == code));
-
-    public ResponseBrandDto? GetBrandByName(string name) =>
-    _mapper.Map<ResponseBrandDto>(Q_GetByFilter(b => b.Name == name));
-
-
-    public int GetBrandProductCountAsync(int id)
-    {
-        var brand = Q_repository.Q_GetByFilter(b => b.Id == id);
-        var dto = _mapper.Map<ResponseBrandWithProductsDto>(brand);
-        return dto.ProductsName.Count ;
-    }
-
     public IQueryable<ResponseBrandWithProductsDto> GetBrandWithProductsById(int id)
     {
         throw new NotImplementedException();
     }
+    public async Task<int> GetBrandProductCountAsync(int id)
+    => await Q_GetByFilter(b => b.Id == id).Select(b => b.Products.Count()).FirstOrDefaultAsync();
 
 }
