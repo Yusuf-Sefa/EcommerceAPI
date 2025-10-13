@@ -17,41 +17,35 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
     protected readonly IEnumerableRepository<T> E_repository;
     protected readonly IQueryableRepository<T> Q_repository;
     protected readonly IMapper _mapper;
-    protected readonly IValidator<TCreateDto> _validator;
+    protected readonly IValidator<TCreateDto> _createValidator;
+    protected readonly IValidator<TUpdateDto> _updateValidator;
 
     public BaseService(IEnumerableRepository<T> enumerableRepository,
                         IQueryableRepository<T> queryableRepository,
                         IMapper mapper,
-                        IValidator<TCreateDto> validator)
+                        IValidator<TCreateDto> createValidator,
+                        IValidator<TUpdateDto> updateValidator)
     {
         E_repository = enumerableRepository;
         Q_repository = queryableRepository;
         _mapper = mapper;
-        _validator = validator;
+        _createValidator = createValidator;
+        _updateValidator = updateValidator;
     }
 
     public virtual async Task<IEnumerable<TResponseDto>?> E_GetAll()
     {
         var entities = await E_repository.E_GetAll();
-
-        return
-            entities != null
-                ? _mapper.Map<IEnumerable<TResponseDto>>(entities)
-                : null;
-
+        return _mapper.Map<IEnumerable<TResponseDto>>(entities);
     }
     public virtual async Task<TResponseDto?> E_GetById(int id)
     {
         var entity = await E_repository.E_GetById(id);
-        return
-            entity != null
-                ? _mapper.Map<TResponseDto>(entity)
-                : null;
-
+        return _mapper.Map<TResponseDto>(entity);
     }
     public virtual async Task<TResponseDto?> E_AddEntity(TCreateDto createDto)
     {
-        var validationResponse = await _validator.ValidateAsync(createDto);
+        var validationResponse = await _createValidator.ValidateAsync(createDto);
 
         if (!validationResponse.IsValid)
             throw new ValidationException(validationResponse.Errors.ToString());
@@ -65,18 +59,12 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
     {
         var entity = await E_repository.E_GetById(id);
 
-        if (entity != null)
-        {
-            await E_repository.E_DeleteEntity(id);
-            return _mapper.Map<TResponseDto>(entity);
-        }
-
-        return null;
-
+        await E_repository.E_DeleteEntity(id);
+        return _mapper.Map<TResponseDto>(entity);
     }
     public virtual async Task<TResponseDto?> E_UpdateEntity(TUpdateDto updateDto)
     {
-        var validationResponse = await _validator.ValidateAsync(updateDto);
+        var validationResponse = await _updateValidator.ValidateAsync(updateDto);
 
         if (!validationResponse.IsValid)
             throw new ValidationException(validationResponse.Errors.ToString());

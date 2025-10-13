@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace ECommerceAPI.Validation.BrandValidators;
 
-public class CreateBrandValidator : AbstractValidator<CreateBrandDto>
+public class UpdateBrandValidator : AbstractValidator<UpdateBrandDto>
 {
-    public CreateBrandValidator()
+    public UpdateBrandValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name cannot be empty")
@@ -18,6 +18,9 @@ public class CreateBrandValidator : AbstractValidator<CreateBrandDto>
 
         RuleFor(x => x.Description)
             .MaximumLength(120).WithMessage("Description cannot be long 120 character");
-            
+
+        RuleFor(x => x.IsActive)
+            .NotNull().WithMessage("This area connot be null");
+
     }
 }
