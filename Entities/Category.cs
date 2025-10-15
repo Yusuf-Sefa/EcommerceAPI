@@ -22,6 +22,6 @@ public class Category : IEntityIdBase
     public DateTime? DeletedAt { get; set; }
 
     //Navigation Attributes
-    public ICollection<ProductCategory>? ProductCategories { get; } = [];
+    public ICollection<ProductCategory> ProductCategories { get; } = [];
     
 }

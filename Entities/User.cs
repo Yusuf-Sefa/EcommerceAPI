@@ -22,6 +22,6 @@ public class User : IEntityIdBase
     //Navigation Attributes
     public UserTypes UserType { get; set; }
 
-    public ICollection<Order>? Orders { get; } = [];
+    public ICollection<Order> Orders { get; } = [];
 
 }

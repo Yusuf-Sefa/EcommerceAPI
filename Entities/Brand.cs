@@ -20,6 +20,6 @@ public class Brand : IEntityIdBase
 
 
     //Navigation Attributes//
-    public ICollection<Product>? Products { get; } = [];
+    public ICollection<Product> Products { get; } = [];
 
 }

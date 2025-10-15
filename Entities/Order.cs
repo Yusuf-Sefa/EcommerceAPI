@@ -22,6 +22,6 @@ public class Order : IEntityIdBase
     public User? User { get; set; }
     public int? UserId { get; set; }
 
-    public ICollection<ProductOrder>? ProductOrders { get; } = [];
+    public ICollection<ProductOrder> ProductOrders { get; } = [];
 
 }
