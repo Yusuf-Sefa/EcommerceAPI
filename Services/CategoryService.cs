@@ -48,7 +48,7 @@ public class CategoryService : BaseService<Category, ResponseCategoryDto, Create
 
     public async Task<ResponseCategoryDto?> ActivateCategoryByIdAsync(int id)
     {
-        var category = await Q_GetByFilter(c => c.Id == id).AsNoTracking().FirstOrDefaultAsync();
+        var category = await Q_GetByFilter(c => c.Id == id).FirstOrDefaultAsync();
 
         if (category == null)
             return null;
@@ -59,7 +59,7 @@ public class CategoryService : BaseService<Category, ResponseCategoryDto, Create
     }
     public async Task<ResponseCategoryDto?> DeactivateCategoryByIdAsync(int id)
     {
-        var category = await Q_GetByFilter(c => c.Id == id).AsNoTracking().FirstOrDefaultAsync();
+        var category = await Q_GetByFilter(c => c.Id == id).FirstOrDefaultAsync();
 
         if (category == null)
             return null;
