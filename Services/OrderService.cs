@@ -23,7 +23,7 @@ public class OrderService : BaseService<Order, ResponseOrderDto, CreateOrderDto,
             _createValidator,
             _updateValidator)
     { }
-    
+
     public async Task<ResponseOrderDto?> GetOrderByCodeAsync(string code)
     {
         var order = await Q_GetByFilter(o => o.Code == code).AsNoTracking().FirstOrDefaultAsync();
@@ -36,8 +36,12 @@ public class OrderService : BaseService<Order, ResponseOrderDto, CreateOrderDto,
     }
     public async Task<ResponseOrderDto?> GetOrderWithUserByIdAsync(int id)
     {
-        var order = await Q_MultiplerFilter([o => o.Id == id], [o => o.User]).AsNoTracking().FirstOrDefaultAsync();
-        return _mapper.Map<ResponseOrderDto>(order);
+        var order = await Q_GetByFilter(o => o.Id == id)
+                            .Include(o => o.User)
+                            .AsNoTrackingWithIdentityResolution()
+                            .FirstOrDefaultAsync();
+
+        return _mapper.Map<ResponseOrderDto>(order);                    
     }
     public async Task<ResponseOrderDto?> GetOrderWithProductByIdAsync(int id)
     {
@@ -84,5 +88,6 @@ public class OrderService : BaseService<Order, ResponseOrderDto, CreateOrderDto,
         await E_repository.E_UpdateEntity(order);
         return _mapper.Map<ResponseOrderDto>(order);
     }
+
 
 }
