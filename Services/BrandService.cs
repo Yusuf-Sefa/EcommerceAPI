@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ECommerceAPI.Dtos.BrandDtos;
 using ECommerceAPI.Entities;
 using ECommerceAPI.Repository.RepositoryInterfaces;
@@ -28,20 +29,37 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
 
     public async Task<ResponseBrandDto?> GetBrandByNameAsync(string name)
     {
-        var brand = await Q_GetByFilter(b => b.Name == name).AsNoTracking().FirstOrDefaultAsync();
-        return _mapper.Map<ResponseBrandDto>(brand);
+        var brand = Q_GetByFilter(b => b.Name == name).AsNoTracking();
+
+        return await brand
+                        .ProjectTo<ResponseBrandDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
     public async Task<ResponseBrandDto?> GetBrandByCodeAsync(string code)
     {
-        var brand = await Q_GetByFilter(b => b.Code == code).AsNoTracking().FirstOrDefaultAsync();
-        return _mapper.Map<ResponseBrandDto>(brand);
+        var brand = Q_GetByFilter(b => b.Code == code).AsNoTracking();
+
+        return await brand
+                        .ProjectTo<ResponseBrandDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
     public async Task<ResponseBrandWithProductsDto?> GetBrandWithProductsById(int id)
-    => _mapper.Map<ResponseBrandWithProductsDto>(
-            await Q_GetWithInclude(b => b.Products).Where(b => b.Id == id).AsNoTracking().FirstOrDefaultAsync()
-    );
-    public async Task<int> GetBrandProductCountAsync(int id)
-    => await Q_GetByFilter(b => b.Id == id).Select(b => b.Products.Count()).FirstOrDefaultAsync();
+    {
+        var brand = Q_GetByFilter(b => b.Id == id).AsNoTracking();
+
+        return await brand
+                        .ProjectTo<ResponseBrandWithProductsDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
+    }
+    
+    public async Task<int?> GetBrandProductCountAsync(int id)
+    {
+        var count = await Q_GetByFilter(b => b.Id == id)
+                    .Select(b => (int?)b.Products.Count())
+                    .FirstOrDefaultAsync(); 
+        
+        return count;
+    }
 
     public async Task<ResponseBrandDto?> ActivateBrandAsync(int id)
     {
