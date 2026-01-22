@@ -13,15 +13,15 @@ public class GeneralMapping : Profile
 {
     public GeneralMapping()
     {
-        CreateMap<Brand, CreateBrandDto>().ReverseMap();
+        /*CreateMap<Brand, CreateBrandDto>().ReverseMap();
         CreateMap<Brand, ResponseBrandDto>().ReverseMap();
         CreateMap<Brand, ResponseBrandWithProductsDto>().ReverseMap();
-        CreateMap<Brand, UpdateBrandDto>().ReverseMap();
+        CreateMap<Brand, UpdateBrandDto>().ReverseMap();*/
 
-        CreateMap<Category, CreateCategoryDto>().ReverseMap();
+        /*CreateMap<Category, CreateCategoryDto>().ReverseMap();
         CreateMap<Category, ResponseCategoryDto>().ReverseMap();
         CreateMap<Category, ResponseCategoryWithProducts>().ReverseMap();
-        CreateMap<Category, UpdateCategoryDto>().ReverseMap();
+        CreateMap<Category, UpdateCategoryDto>().ReverseMap();*/
 
         CreateMap<Order, CreateOrderDto>().ReverseMap();
         CreateMap<Order, ResponseOrderDto>().ReverseMap();
