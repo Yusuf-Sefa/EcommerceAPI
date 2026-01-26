@@ -8,8 +8,7 @@ public interface IOrderService
 {
     public Task<ResponseOrderDto?> GetOrderByCodeAsync(string code);
     public Task<ResponseOrderDto?> GetOrderByUserIdAsync(int userId);
-    public Task<ResponseOrderDto?> GetOrderWithUserByIdAsync(int id);
-    public Task<ResponseOrderDto?> GetOrderWithProductByIdAsync(int id);
+    public Task<ResponseOrderWithProducts?> GetOrderWithProductByIdAsync(int id);
 
     public Task<ResponseOrderDto?> ActivateOrderByIdAsync(int id);
     public Task<ResponseOrderDto?> DeactivateOrderByIdAsync(int id);

@@ -36,11 +36,13 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
     public virtual async Task<IEnumerable<TResponseDto>?> E_GetAll()
     {
         var entities = await E_repository.E_GetAll();
+
         return _mapper.Map<IEnumerable<TResponseDto>>(entities);
     }
     public virtual async Task<TResponseDto?> E_GetById(int id)
     {
         var entity = await E_repository.E_GetById(id);
+
         return _mapper.Map<TResponseDto>(entity);
     }
     public virtual async Task<TResponseDto?> E_AddEntity(TCreateDto createDto)
@@ -52,14 +54,15 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
 
         var entity = _mapper.Map<T>(createDto);
         await E_repository.E_AddEntity(entity);
-        return _mapper.Map<TResponseDto>(entity);
 
+        return _mapper.Map<TResponseDto>(entity);
     }
     public virtual async Task<TResponseDto?> E_DeleteEntity(int id)
     {
         var entity = await E_repository.E_GetById(id);
 
         await E_repository.E_DeleteEntity(id);
+
         return _mapper.Map<TResponseDto>(entity);
     }
     public virtual async Task<TResponseDto?> E_UpdateEntity(TUpdateDto updateDto)
@@ -71,8 +74,8 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
 
         var entity = _mapper.Map<T>(updateDto);
         await E_repository.E_UpdateEntity(entity);
-        return _mapper.Map<TResponseDto>(entity);
 
+        return _mapper.Map<TResponseDto>(entity);
     }
 
 

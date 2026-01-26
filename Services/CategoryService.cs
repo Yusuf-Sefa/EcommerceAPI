@@ -1,5 +1,6 @@
 
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ECommerceAPI.Dtos.CategoryDtos;
 using ECommerceAPI.Entities;
 using ECommerceAPI.Repository.RepositoryInterfaces;
@@ -25,32 +26,45 @@ public class CategoryService : BaseService<Category, ResponseCategoryDto, Create
 
     public async Task<ResponseCategoryDto?> GetCategoryByNameAsync(string name)
     {
-        var category = await Q_GetByFilter(c => c.Name == name).AsNoTracking().FirstOrDefaultAsync();
-        return _mapper.Map<ResponseCategoryDto>(category);
+        // "AsNoTracking" is optional. 
+        var category = Q_GetByFilter(c => c.Name == name).AsNoTracking();
+
+        return await category
+                        .ProjectTo<ResponseCategoryDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
     public async Task<ResponseCategoryDto?> GetCategoryByCodeAsync(string code)
     {
-        var category = await Q_GetByFilter(c => c.Code == code).AsNoTracking().FirstOrDefaultAsync();
-        return _mapper.Map<ResponseCategoryDto>(category);
+        // "AsNoTracking" is optional. 
+        var category = Q_GetByFilter(c => c.Code == code).AsNoTracking();
+
+        return await category
+                        .ProjectTo<ResponseCategoryDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
     public async Task<ResponseCategoryWithProducts?> GetCategoryWithProductsByIdAsync(int id)
     {
-        var category = await Q_GetByFilter(c => c.Id == id)
-                            .Include(c => c.ProductCategories)
-                            .ThenInclude(pc => pc.Product)
-                            .AsNoTrackingWithIdentityResolution()
-                            .FirstOrDefaultAsync();
+        // "AsNoTracking" is optional. 
+        var category = Q_GetByFilter(c => c.Id == id).AsNoTracking();
 
-        return _mapper.Map<ResponseCategoryWithProducts>(category);
+        return await category
+                        .ProjectTo<ResponseCategoryWithProducts>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
-    public async Task<int> GetCategoryProductCountByIdAsync(int id)
-    => await Q_GetByFilter(c => c.Id == id).Select(c => c.ProductCategories.Count()).FirstOrDefaultAsync();
+    public async Task<int?> GetCategoryProductCountByIdAsync(int id)
+    {
+        var count = await Q_GetByFilter(c => c.Id == id)
+                            .Select(c => (int?)c.ProductCategories.Count())
+                            .FirstOrDefaultAsync();
+        
+        return count;
+    }
 
     public async Task<ResponseCategoryDto?> ActivateCategoryByIdAsync(int id)
     {
         var category = await Q_GetByFilter(c => c.Id == id).FirstOrDefaultAsync();
 
-        if (category == null)
+        if (category is null)
             return null;
 
         category.IsActive = true;
@@ -61,7 +75,7 @@ public class CategoryService : BaseService<Category, ResponseCategoryDto, Create
     {
         var category = await Q_GetByFilter(c => c.Id == id).FirstOrDefaultAsync();
 
-        if (category == null)
+        if (category is null)
             return null;
 
         category.IsActive = true;

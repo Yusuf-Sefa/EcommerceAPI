@@ -1,6 +1,5 @@
 
-using System.Linq.Expressions;
-using System.Threading.Tasks;
+
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ECommerceAPI.Dtos.BrandDtos;
@@ -29,6 +28,7 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
 
     public async Task<ResponseBrandDto?> GetBrandByNameAsync(string name)
     {
+        // "AsNoTracking" is optional.
         var brand = Q_GetByFilter(b => b.Name == name).AsNoTracking();
 
         return await brand
@@ -37,6 +37,7 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
     }
     public async Task<ResponseBrandDto?> GetBrandByCodeAsync(string code)
     {
+        // "AsNoTracking" is optional.
         var brand = Q_GetByFilter(b => b.Code == code).AsNoTracking();
 
         return await brand
@@ -45,6 +46,7 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
     }
     public async Task<ResponseBrandWithProductsDto?> GetBrandWithProductsById(int id)
     {
+        // "AsNoTracking" is optional.
         var brand = Q_GetByFilter(b => b.Id == id).AsNoTracking();
 
         return await brand
@@ -65,7 +67,7 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
     {
         var brand = await Q_GetByFilter(b => b.Id == id).FirstOrDefaultAsync();
 
-        if (brand == null)
+        if (brand is null)
             return null;
 
         brand.IsActive = true;
@@ -76,7 +78,7 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
     {
         var brand = await Q_GetByFilter(b => b.Id == id).FirstOrDefaultAsync();
 
-        if (brand == null)
+        if (brand is null)
             return null;
 
         brand.IsActive = false;
