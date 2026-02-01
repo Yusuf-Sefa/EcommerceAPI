@@ -70,8 +70,11 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
         if (brand is null)
             return null;
 
-        brand.IsActive = true;
-        await E_repository.E_UpdateEntity(brand);
+        if(brand.IsActive != true)
+        {
+            brand.IsActive = true;
+            await E_repository.E_UpdateEntity(brand);
+        }
         return _mapper.Map<ResponseBrandDto>(brand);
     }
     public async Task<ResponseBrandDto?> DeactivateBrandAsync(int id)
@@ -81,8 +84,11 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
         if (brand is null)
             return null;
 
-        brand.IsActive = false;
-        await E_repository.E_UpdateEntity(brand);
+        if(brand.IsActive != true)
+        {
+            brand.IsActive = false;
+            await E_repository.E_UpdateEntity(brand);   
+        }
         return _mapper.Map<ResponseBrandDto>(brand);
     }
 
