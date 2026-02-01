@@ -1,9 +1,9 @@
 
 using System.Linq.Expressions;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ECommerceAPI.Repository.RepositoryInterfaces;
 using FluentValidation;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceAPI.Services.Interfaces;
@@ -90,5 +90,22 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
     public virtual IQueryable<T> Q_GetWithIncludeAsSplitQuery(params Expression<Func<T, object>>[]? includes)
     => Q_repository.Q_GetWithIncludeAsSplitQuery(includes);
 
+
+    public virtual async Task<List<TResponseDto>?> GetAllWithDto()
+    {
+        var entity = Q_repository.Q_GetAll();
+
+        return await entity
+                        .ProjectTo<TResponseDto>(_mapper.ConfigurationProvider)
+                        .ToListAsync();        
+    }
+    public virtual async Task<TResponseDto?> GetByIdWithDto(int id)
+    {
+        var entity = Q_repository.Q_GetAll().Where(e => EF.Property<int>(e, "Id") == id);
+
+        return await entity
+                        .ProjectTo<TResponseDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
+    }
 
 }

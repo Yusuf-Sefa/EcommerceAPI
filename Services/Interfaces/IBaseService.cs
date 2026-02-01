@@ -24,4 +24,8 @@ public interface IBaseService<T, TResponseDto, TCreateDto, TUpdateDto>
     IQueryable<T> Q_GetWithIncludeAsSplitQuery(params Expression<Func<T, object>>[]? includes);
     IQueryable<T> Q_MultiplerFilter(Expression<Func<T, bool>>[] filters, params Expression<Func<T, object>>[] includes);
 
+    //For controllers//
+    Task<List<TResponseDto>?> GetAllWithDto();
+    Task<TResponseDto?> GetByIdWithDto(int id);
+
 }
