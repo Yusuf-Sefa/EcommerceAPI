@@ -1,9 +1,8 @@
 
-using ECommerceAPI.Dtos.BrandDtos;
 
 namespace ECommerceAPI.Services.Interfaces;
 
-public interface IBrandService
+public interface IBrandService : IBaseService<Brand, ResponseBrandDto, CreateBrandDto, UpdateBrandDto>
 {
 
     public Task<ResponseBrandDto?> GetBrandByNameAsync(string name);
