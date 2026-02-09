@@ -1,4 +1,12 @@
 
+using DotNetEnv;
+using ECommerceAPI.APIContext;
+using ECommerceAPI.Repository;
+using ECommerceAPI.Repository.RepositoryInterfaces;
+using ECommerceAPI.Services;
+using ECommerceAPI.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
