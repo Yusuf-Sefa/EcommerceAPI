@@ -1,8 +1,4 @@
 
-using ECommerceAPI.APIContext;
-using Microsoft.EntityFrameworkCore;
-using DotNetEnv;
-
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
@@ -17,6 +13,12 @@ var connectionString = $"Host={host};Port={port};Database={dbName};Username={use
 
 builder.Services.AddDbContext<Context>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped(typeof(IEnumerableRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IQueryableRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IBaseService<,,,>), typeof(BaseService<,,,>));
+
+builder.Services.AddScoped<IBrandService, BrandService>();
 
 var app = builder.Build();
 
