@@ -1,5 +1,8 @@
 
 
+using ECommerceAPI.Dtos.BrandDtos;
+using ECommerceAPI.Entities;
+
 namespace ECommerceAPI.Services.Interfaces;
 
 public interface IBrandService : IBaseService<Brand, ResponseBrandDto, CreateBrandDto, UpdateBrandDto>
