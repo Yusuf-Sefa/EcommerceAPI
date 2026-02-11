@@ -1,9 +1,10 @@
 
 using ECommerceAPI.Dtos.CategoryDtos;
+using ECommerceAPI.Entities;
 
 namespace ECommerceAPI.Services.Interfaces;
 
-public interface ICategoryService
+public interface ICategoryService : IBaseService<Category, ResponseCategoryDto, CreateCategoryDto, UpdateCategoryDto>
 {
     public Task<ResponseCategoryDto?> GetCategoryByNameAsync(string name);
     public Task<ResponseCategoryDto?> GetCategoryByCodeAsync(string code);
