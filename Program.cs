@@ -27,6 +27,7 @@ builder.Services.AddScoped(typeof(IQueryableRepository<>), typeof(GenericReposit
 builder.Services.AddScoped(typeof(IBaseService<,,,>), typeof(BaseService<,,,>));
 
 builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
