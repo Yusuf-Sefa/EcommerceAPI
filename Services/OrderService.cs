@@ -1,5 +1,6 @@
 
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ECommerceAPI.Dtos.OrderDtos;
 using ECommerceAPI.Entities;
 using ECommerceAPI.Entities.Enums;
@@ -26,32 +27,30 @@ public class OrderService : BaseService<Order, ResponseOrderDto, CreateOrderDto,
 
     public async Task<ResponseOrderDto?> GetOrderByCodeAsync(string code)
     {
-        var order = await Q_GetByFilter(o => o.Code == code).AsNoTracking().FirstOrDefaultAsync();
-        return _mapper.Map<ResponseOrderDto>(order);
+        // "AsNoTracking" is optional.
+        var order = Q_GetByFilter(o => o.Code == code).AsNoTracking();
+
+        return await order
+                        .ProjectTo<ResponseOrderDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
     public async Task<ResponseOrderDto?> GetOrderByUserIdAsync(int userId)
     {
-        var order = await Q_GetByFilter(c => c.UserId == userId).AsNoTracking().FirstOrDefaultAsync();
-        return _mapper.Map<ResponseOrderDto>(order);
-    }
-    public async Task<ResponseOrderDto?> GetOrderWithUserByIdAsync(int id)
-    {
-        var order = await Q_GetByFilter(o => o.Id == id)
-                            .Include(o => o.User)
-                            .AsNoTrackingWithIdentityResolution()
-                            .FirstOrDefaultAsync();
+        // "AsNoTracking" is optional.
+        var order = Q_GetByFilter(c => c.UserId == userId).AsNoTracking();
 
-        return _mapper.Map<ResponseOrderDto>(order);                    
+        return await order
+                        .ProjectTo<ResponseOrderDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
-    public async Task<ResponseOrderDto?> GetOrderWithProductByIdAsync(int id)
+    public async Task<ResponseOrderWithProducts?> GetOrderWithProductByIdAsync(int id)
     {
-        var order = await Q_GetByFilter(o => o.Id == id)
-                            .Include(o => o.ProductOrders)
-                            .ThenInclude(po => po.Product)
-                            .AsNoTrackingWithIdentityResolution()
-                            .FirstOrDefaultAsync();
+        // "AsNoTracking" is optional.
+        var order = Q_GetByFilter(o => o.Id == id).AsNoTracking();
 
-        return _mapper.Map<ResponseOrderDto>(order);
+        return await order
+                        .ProjectTo<ResponseOrderWithProducts>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
 
 
@@ -59,18 +58,19 @@ public class OrderService : BaseService<Order, ResponseOrderDto, CreateOrderDto,
     {
         var order = await Q_GetByFilter(o => o.Id == id).FirstOrDefaultAsync();
 
-        if (order == null)
+        if (order is null)
             return null;
 
         order.IsActive = true;
         await E_repository.E_UpdateEntity(order);
+        
         return _mapper.Map<ResponseOrderDto>(order);
     }
     public async Task<ResponseOrderDto?> DeactivateOrderByIdAsync(int id)
     {
         var order = await Q_GetByFilter(o => o.Id == id).FirstOrDefaultAsync();
 
-        if (order == null)
+        if (order is null)
             return null;
 
         order.IsActive = false;
@@ -81,7 +81,7 @@ public class OrderService : BaseService<Order, ResponseOrderDto, CreateOrderDto,
     {
         var order = await Q_GetByFilter(o => o.Id == id).FirstOrDefaultAsync();
 
-        if (order == null)
+        if (order is null)
             return null;
 
         order.Status = status;
