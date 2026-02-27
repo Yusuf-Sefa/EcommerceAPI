@@ -11,11 +11,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceAPI.Services;
 
-public class ProductService : BaseService<Product, ResponseProductDto, CreateProductDto, UpdateProductDto>
+public class ProductService : BaseService<Product, ResponseProductDto, CreateProductDto, UpdateProductDto>, IProductService
 {
     public ProductService(IEnumerableRepository<Product> enumerableRepository,
                           IQueryableRepository<Product> queryableRepository,
-                          Mapper _mapper,
+                          IMapper _mapper,
                           IValidator<CreateProductDto> _createValidator,
                           IValidator<UpdateProductDto> _updateValidator)
     : base(enumerableRepository,
