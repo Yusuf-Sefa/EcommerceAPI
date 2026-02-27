@@ -25,6 +25,8 @@ var connectionString = $"Host={host};Port={port};Database={dbName};Username={use
 builder.Services.AddDbContext<Context>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddControllers();
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddAutoMapper(typeof(BrandMappingProfile));
