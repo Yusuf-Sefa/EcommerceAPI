@@ -17,26 +17,29 @@ public class AuthService
 {
     private readonly IEnumerableRepository<User> E_repository;
     private readonly IQueryableRepository<User> Q_repository;
-    private readonly IValidator<AuthUserDto> _validator;
+    private readonly IValidator<AuthUserDto> _authValidator;
+    private readonly IValidator<LoginUserDto> _loginValidator;
     private readonly IMapper _mapper;
     private readonly IConfiguration configuration;
     public AuthService(User user,
                         IEnumerableRepository<User> E_repository,
                         IQueryableRepository<User> Q_repository,
-                        IValidator<AuthUserDto> _validator,
+                        IValidator<AuthUserDto> _authValidator,
+                        IValidator<LoginUserDto> _loginValidator,
                         IMapper _mapper,
                         IConfiguration configuration)
     {
         this.E_repository = E_repository;
         this.Q_repository = Q_repository;
-        this._validator = _validator;
+        this._authValidator = _authValidator;
+        this._loginValidator = _loginValidator;
         this._mapper = _mapper;
         this.configuration = configuration;
     }
 
     public async Task<ResponseUserDto> Register (AuthUserDto request)
     {
-        var validationResponse = await _validator.ValidateAsync(request);
+        var validationResponse = await _authValidator.ValidateAsync(request);
         if (!validationResponse.IsValid)
             throw new ValidationException(validationResponse.Errors.ToString());
 
@@ -52,7 +55,7 @@ public class AuthService
 
     public async Task<string> Login (LoginUserDto request)
     {
-        var validationResponse = await _validator.ValidateAsync(request);
+        var validationResponse = await _loginValidator.ValidateAsync(request);
         if(!validationResponse.IsValid)
             throw new ValidationException(validationResponse.Errors.ToString());
         
