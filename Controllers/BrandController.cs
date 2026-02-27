@@ -1,4 +1,6 @@
 
+using ECommerceAPI.Dtos.BrandDtos;
+using ECommerceAPI.Services;
 using ECommerceAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -104,5 +106,13 @@ public class BrandController : ControllerBase
                 : Ok(res);
     }
 
+    //Post
+    [HttpPost("addBrand")]
+    public async Task<IActionResult> AddBrand([FromBody] CreateBrandDto createBrandDto)
+    {
+        var brand = await _brandService.E_AddEntity(createBrandDto);
+
+        return Ok(brand);
+    }
 
 }
