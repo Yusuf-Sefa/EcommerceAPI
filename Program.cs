@@ -8,6 +8,7 @@ using ECommerceAPI.Services;
 using ECommerceAPI.Services.Interfaces;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ var connectionString = $"Host={host};Port={port};Database={dbName};Username={use
 builder.Services.AddDbContext<Context>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddOpenApi();
 
 builder.Services.AddAutoMapper(typeof(BrandMappingProfile));
 builder.Services.AddValidatorsFromAssemblyContaining<IBrandService>();
@@ -43,6 +45,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
