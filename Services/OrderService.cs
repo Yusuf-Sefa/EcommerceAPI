@@ -15,7 +15,7 @@ public class OrderService : BaseService<Order, ResponseOrderDto, CreateOrderDto,
 {
     public OrderService(IEnumerableRepository<Order> enumerableRepository,
                         IQueryableRepository<Order> queryableRepository,
-                        Mapper _mapper,
+                        IMapper _mapper,
                         IValidator<CreateOrderDto> _createValidator,
                         IValidator<UpdateOrderDto> _updateValidator)
     : base(enumerableRepository,
