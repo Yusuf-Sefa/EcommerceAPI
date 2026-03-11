@@ -9,7 +9,6 @@ public class Product : IEntityIdBase
     //Entity Attributes
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Slug { get; set; }
     public string SKU { get; set; }
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
