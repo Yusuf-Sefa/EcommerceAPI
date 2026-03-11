@@ -84,7 +84,7 @@ public class BrandService : BaseService<Brand, ResponseBrandDto, CreateBrandDto,
         if (brand is null)
             return null;
 
-        if(brand.IsActive != true)
+        if(brand.IsActive != false)
         {
             brand.IsActive = false;
             await E_repository.E_UpdateEntity(brand);   
