@@ -1,5 +1,6 @@
 
 
+using ECommerceAPI.Dtos.CategoryDtos;
 using ECommerceAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -78,6 +79,7 @@ public class CategoryController : ControllerBase
                 : Ok(new {productCount = res});
     }
 
+
     [HttpPatch("activate/{id:int}")]
     public async Task<IActionResult> Activate(int id)
     {
@@ -98,4 +100,12 @@ public class CategoryController : ControllerBase
                 : Ok(res);
     }
 
+
+    [HttpPost("addCategory")]
+    public async Task<IActionResult> AddCategory([FromBody] CreateCategoryDto createCategoryDto)
+    {
+        var category = await _categoryService.E_AddEntity(createCategoryDto);
+
+        return Ok(category);
+    }
 }

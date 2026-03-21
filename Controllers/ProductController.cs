@@ -1,4 +1,5 @@
 
+using ECommerceAPI.Dtos.ProductDtos;
 using ECommerceAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,8 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
 
+
+    //Get
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -95,6 +98,8 @@ public class ProductController : ControllerBase
                 : Ok(res);
     }
 
+
+    //Patch
     [HttpPatch("activate/{id:int}")]
     public async Task<IActionResult> Activate(int id)
     {
@@ -134,4 +139,16 @@ public class ProductController : ControllerBase
                 ? NotFound() 
                 : Ok(res);
     }
+
+
+    //Post
+    [HttpPost("addProduct")]
+    public async Task<IActionResult> AddProduct([FromBody] CreateProductDto createProductDto)
+    {
+        var product = _productService.E_AddEntity(createProductDto);
+
+        return Ok(product);
+    }
+    
+    
 }

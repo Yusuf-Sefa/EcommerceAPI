@@ -1,4 +1,5 @@
 
+using ECommerceAPI.Dtos.OrderDtos;
 using ECommerceAPI.Entities.Enums;
 using ECommerceAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,8 @@ public class OrderController : ControllerBase
                 : Ok(res);
     }
 
+
+
     [HttpPatch("activate/{id:int}")]
     public async Task<IActionResult> Activate(int id)
     {
@@ -94,5 +97,15 @@ public class OrderController : ControllerBase
         return res is null 
                 ? NotFound() 
                 : Ok(res);
+    }
+
+    
+    //Post
+    [HttpPost("addOrder")]
+    public async Task<IActionResult> AddOrder([FromBody] CreateOrderDto createOrderDto)
+    {
+        var order = await _orderService.E_AddEntity(createOrderDto);
+
+        return Ok(order);
     }
 }
