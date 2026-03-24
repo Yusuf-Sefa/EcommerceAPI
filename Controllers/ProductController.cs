@@ -145,7 +145,7 @@ public class ProductController : ControllerBase
     [HttpPost("addProduct")]
     public async Task<IActionResult> AddProduct([FromBody] CreateProductDto createProductDto)
     {
-        var product = _productService.E_AddEntity(createProductDto);
+        var product = await _productService.E_AddEntity(createProductDto);
 
         return Ok(product);
     }
