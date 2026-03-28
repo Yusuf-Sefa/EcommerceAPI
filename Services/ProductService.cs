@@ -4,6 +4,7 @@ using AutoMapper.QueryableExtensions;
 using ECommerceAPI.Dtos.BrandDtos;
 using ECommerceAPI.Dtos.ProductDtos;
 using ECommerceAPI.Entities;
+using ECommerceAPI.Entities.PivotTables;
 using ECommerceAPI.Repository.RepositoryInterfaces;
 using ECommerceAPI.Services.Interfaces;
 using FluentValidation;
@@ -154,6 +155,43 @@ public class ProductService : BaseService<Product, ResponseProductDto, CreatePro
         return await products
                         .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
                         .ToListAsync();
+    }
+
+    public async override Task<ResponseProductDto> E_AddEntity(CreateProductDto dto)
+    {
+        var validationResponse = await _createValidator.ValidateAsync(dto);
+        if(!validationResponse.IsValid)
+            throw new ValidationException(validationResponse.Errors.ToString());
+
+        var brandIsExists = await _brandService.IsExists(dto.BrandId);
+        if(!brandIsExists)
+            throw new Exception("Brand is not Exists");
+
+        foreach(int id in dto.CategoryIds)
+        {
+            var categoryIsExsists = await _categoryService.IsExists(id);
+            if(!categoryIsExsists)
+                throw new Exception($"Category with ID {id} not found");
+        }
+
+        var product = _mapper.Map<Product>(dto);
+
+        product.ProductCategories = dto.CategoryIds
+                                    .Select(categoryId => new ProductCategory
+                                        {
+                                            CategoryId = categoryId
+                                        })
+                                    .ToList();
+
+        await E_repository.E_AddEntity(product);
+
+        return await Q_repository
+                        .Q_GetByFilter(p => p.Id == product.Id)
+                        .AsNoTracking()
+                        .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync()
+                        ?? throw new Exception("Failed to retrieve created product");
+        
     }
 
 }
