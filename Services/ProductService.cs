@@ -138,20 +138,56 @@ public class ProductService : BaseService<Product, ResponseProductDto, CreatePro
                         .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
     }
-    public async Task<ResponseProductDto?> ToggleActivationByCategoryName(string name)
+    public async Task<List<ResponseProductDto>?> ToggleActivationByCategoryName(string name)
     {
-        var product = await Q_GetByFilter(p => p.ProductCategories.Any(pc => pc.Category.Name == name))
+        /*var products = await Q_GetByFilter(p => p.ProductCategories.Any(pc => pc.Category.Name == name))
                             .Include(p => p.Brand)
                             .ToListAsync();
 
-        if(product is null)
+        if(products is null || !products.Any())
             return null;
-        foreach(Product p in product)
+        foreach(Product p in products)
         {
             p.IsActive = !p.IsActive;
             await E_repository.E_UpdateEntity(p);
         }
-        return _mapper.Map<ResponseProductDto>(product);
+
+        var updatedIds = products.Select(p => p.Id).ToList();
+
+        return await Q_GetByFilter(p => updatedIds.Contains(p.Id))
+                    .AsNoTracking()
+                    .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+        */
+
+        /*
+        var updatedIds = await Q_GetByFilter(p => p.ProductCategories.Any(pc => pc.Category.Name == name))
+                            .Select(p => p.Id)
+                            .ToListAsync();
+
+        if (!updatedIds.Any()) return null;
+
+        await Q_GetByFilter(p => updatedIds.Contains(p.Id))
+            .ExecuteUpdateAsync(s => s.SetProperty(p => p.IsActive, p => !p.IsActive));
+
+         return await Q_GetByFilter(p => updatedIds.Contains(p.Id))
+                    .AsNoTracking()
+                    .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+        */
+
+        var query = Q_GetByFilter(p => p.ProductCategories.Any(pc => pc.Category.Name == name));
+
+        var products = await query
+                            .ExecuteUpdateAsync(p => p.SetProperty(p => p.IsActive, p => !p.IsActive));
+
+        if(products == 0)
+            return null;
+
+        return await query
+                    .AsNoTracking()
+                    .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
     }
 
     public async Task<List<ResponseProductDto>?> GetProductByCategoryId(int id)
