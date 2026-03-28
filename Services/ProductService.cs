@@ -113,8 +113,7 @@ public class ProductService : BaseService<Product, ResponseProductDto, CreatePro
     }
     public async Task<ResponseProductDto?> ToggleProductActivationById(int id)
     {
-        var product = await Q_GetByFilter(p => p.Id == id)
-                            .Include(p => p.Brand)
+        /*var product = await Q_GetByFilter(p => p.Id == id)
                             .FirstOrDefaultAsync();
 
         if(product is null)
@@ -122,7 +121,22 @@ public class ProductService : BaseService<Product, ResponseProductDto, CreatePro
 
         product.IsActive = !product.IsActive;
         await E_repository.E_UpdateEntity(product);
-        return _mapper.Map<ResponseProductDto>(product);
+        return await Q_GetByFilter(p => p.Id == id)
+                        .AsNoTracking()
+                        .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
+        */
+                        
+        var product = await Q_GetByFilter(p => p.Id == id)
+                            .ExecuteUpdateAsync(p => p.SetProperty(p => p.IsActive, p => !p.IsActive));
+
+        if(product == 0)
+            return null;
+
+        return await Q_GetByFilter(p => p.Id == id)
+                        .AsNoTracking()
+                        .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
     }
     public async Task<ResponseProductDto?> ToggleActivationByCategoryName(string name)
     {
