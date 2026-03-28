@@ -9,4 +9,7 @@ public interface IEnumerableRepository<T> where T : class
     Task E_UpdateEntity(T entity);
     Task E_DeleteEntity(int id);
 
+    Task<bool> IsExists(int id);
+    Task<T> IsExistsWithObj(int id);
+
 }
