@@ -13,17 +13,27 @@ namespace ECommerceAPI.Services;
 
 public class ProductService : BaseService<Product, ResponseProductDto, CreateProductDto, UpdateProductDto>, IProductService
 {
+
+
+    private readonly IBrandService _brandService;
+    private readonly ICategoryService _categoryService;
+    
     public ProductService(IEnumerableRepository<Product> enumerableRepository,
                           IQueryableRepository<Product> queryableRepository,
                           IMapper _mapper,
                           IValidator<CreateProductDto> _createValidator,
-                          IValidator<UpdateProductDto> _updateValidator)
+                          IValidator<UpdateProductDto> _updateValidator,
+                          IBrandService brandService,
+                          ICategoryService categoryService)
     : base(enumerableRepository,
             queryableRepository,
             _mapper,
             _createValidator,
             _updateValidator)
-    { }
+    {
+        _brandService = brandService;
+        _categoryService = categoryService;
+    }
 
     public async Task<ResponseProductDto?> GetProductByName(string name)
     {
