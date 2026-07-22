@@ -9,8 +9,10 @@ public class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
-        CreateMap<CreateUserDto, User>();
-        
-        CreateMap<User, ResponseUserDto>();
+        CreateMap<AuthUserDto, User>();
+
+        CreateMap<User, ResponseUserDto>()
+                    .ForMember(dto => dto.Orders,
+                                entity => entity.MapFrom(src => src.Orders.Select(o => o.Id).ToList()));
     }
 }
