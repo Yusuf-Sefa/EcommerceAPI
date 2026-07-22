@@ -11,5 +11,5 @@ public class ResponseUserDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public ICollection<int> Orders { get; set; } = new List<int>();
+    public ICollection<int> Orders { get; set; } = [];
 }
