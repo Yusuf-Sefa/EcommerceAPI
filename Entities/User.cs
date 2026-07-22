@@ -19,6 +19,9 @@ public class User : IEntityIdBase
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? DeletedAt { get; set; }
 
+    public string? RefreshToken {get; set;}
+    public DateTime? RefreshTokenExpiryTime {get; set;}
+
     //Navigation Attributes
     public UserTypes UserType { get; set; }
 
