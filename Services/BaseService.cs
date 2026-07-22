@@ -77,7 +77,10 @@ public class BaseService<T, TResponseDto, TCreateDto,TUpdateDto> : IBaseService<
 
         return _mapper.Map<TResponseDto>(entity);
     }
-
+    public async Task<bool> IsExists(int id)
+    => await E_repository.IsExists(id);
+    public async Task<T> IsExistsWithObj(int id)
+    => await E_repository.IsExistsWithObj(id);
 
     public virtual IQueryable<T> Q_GetAll() 
     => Q_repository.Q_GetAll();

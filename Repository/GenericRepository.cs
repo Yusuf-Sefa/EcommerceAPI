@@ -51,7 +51,15 @@ public class GenericRepository<T> : IEnumerableRepository<T>, IQueryableReposito
         _dbSet.Update(entity);
         await SaveChangesAsync();
     }
-
+    public async Task<bool> IsExists(int id)
+    {
+        return await _dbSet.AnyAsync(x => x.Id == id);
+    }
+    public async Task<T> IsExistsWithObj(int id)
+    {
+        var obj = await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return obj;
+    }
 
     //Queryable methods//
     public IQueryable<T> Q_GetAll()

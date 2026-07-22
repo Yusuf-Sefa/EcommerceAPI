@@ -15,6 +15,8 @@ public interface IBaseService<T, TResponseDto, TCreateDto, TUpdateDto>
     Task<TResponseDto?> E_AddEntity(TCreateDto createDto);
     Task<TResponseDto?> E_DeleteEntity(int id);
     Task<TResponseDto?> E_UpdateEntity(TUpdateDto updateDto);
+    Task<bool> IsExists(int id);
+    Task<T> IsExistsWithObj(int id);
 
 
     //Queryables//

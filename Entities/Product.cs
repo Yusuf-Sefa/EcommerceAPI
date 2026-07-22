@@ -26,7 +26,7 @@ public class Product : IEntityIdBase
     public Brand? Brand { get; set; }
     public int? BrandId { get; set; }
 
-    public ICollection<ProductCategory> ProductCategories { get; } = [];
+    public ICollection<ProductCategory> ProductCategories { get; set;} = [];
 
     public ICollection<ProductOrder> ProductOrders { get; } = [];
 }

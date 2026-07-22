@@ -13,7 +13,7 @@ public interface IProductService : IBaseService<Product, ResponseProductDto, Cre
     public  Task<ResponseProductDto?> DeactiveProductById(int id);
     public  Task<ResponseProductDto?> ActivateProductById(int id);
     public  Task<ResponseProductDto?> ToggleProductActivationById(int id);
-    public  Task<ResponseProductDto?> ToggleActivationByCategoryName(string name);
+    public  Task<List<ResponseProductDto>?> ToggleActivationByCategoryName(string name);
     public  Task<List<ResponseProductDto>?> GetProductByCategoryId(int id);
     public  Task<List<ResponseProductDto>?> GetProductByCategoryName(string name);
 }
